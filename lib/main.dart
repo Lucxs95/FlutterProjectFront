@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'homescreen.dart'; // Import HomeScreen
+import 'homescreen.dart'; // Importer HomeScreen
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Login UI',
+      title: 'Interface de Connexion Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -33,8 +33,15 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<void> signInWithEmailAndPassword(BuildContext context) async {
-    final String backendUrl = 'http://localhost:5000/api/auth/login';
+Future<void> seConnecterAvecEmailEtMotDePasse(BuildContext context) async {
+  // Vérifier si les champs email ou mot de passe sont vides
+  if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+    // Afficher un dialogue d'erreur si un des champs est vide
+    afficherDialogErreur(context, "L'email et le mot de passe ne doivent pas être vides.");
+    return; // Arrêter l'exécution de la méthode si un champ est vide
+  }
+
+  final String backendUrl = 'http://localhost:5000/api/auth/login';
     try {
       final response = await http.post(
         Uri.parse(backendUrl),
@@ -50,34 +57,34 @@ class LoginScreen extends StatelessWidget {
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
         var token = jsonDecode(response.body)['token'];
-        await prefs.setString('token', token); // Store token
-        print('Login successful. Token: $token');
+        await prefs.setString('token', token); // Stocker le token
+        print('Connexion réussie. Token: $token');
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
       } else {
-        String errorMessage = 'An error occurred';
+        String messageErreur = 'Une erreur est survenue';
         try {
           final responseBody = jsonDecode(response.body);
-          errorMessage = responseBody['message'] ?? errorMessage;
+          messageErreur = responseBody['message'] ?? messageErreur;
         } catch (e) {
-          errorMessage = response.body.isNotEmpty ? response.body : errorMessage;
+          messageErreur = response.body.isNotEmpty ? response.body : messageErreur;
         }
-        showErrorDialog(context, errorMessage);
+        afficherDialogErreur(context, messageErreur);
       }
     } catch (e) {
-      showErrorDialog(context, "An unexpected error occurred.");
+      afficherDialogErreur(context, "Une erreur inattendue est survenue.");
     }
   }
 
-  void showErrorDialog(BuildContext context, String message) {
+  void afficherDialogErreur(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Error"),
+          title: Text("Erreur"),
           content: Text(message),
           actions: [
             TextButton(
-              child: Text("Close"),
+              child: Text("Fermer"),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -101,7 +108,7 @@ class LoginScreen extends StatelessWidget {
             TextFormField(
               controller: emailController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Login',
               ),
             ),
             SizedBox(height: 8.0),
@@ -114,7 +121,7 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 24.0),
             ElevatedButton(
-              onPressed: () => signInWithEmailAndPassword(context),
+              onPressed: () => seConnecterAvecEmailEtMotDePasse(context),
               child: Text('Se connecter'),
             ),
           ],
