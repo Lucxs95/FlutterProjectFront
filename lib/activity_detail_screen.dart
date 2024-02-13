@@ -2,33 +2,38 @@ import 'package:flutter/material.dart';
 import 'activity.dart'; // Assurez-vous que le chemin d'accès est correct
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // Pour utiliser json.decode
+import 'package:shared_preferences/shared_preferences.dart';
 
-
+Future<String?> getJwtToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('flutter.token'); // Utilisez la clé que vous avez utilisée pour sauvegarder le token
+}
 
 Future<void> addToCart(Activity activity) async {
+  final jwtToken = await getJwtToken(); // Récupération du token
+  if (jwtToken == null) {
+    print('JWT Token is null');
+    return;
+  }
+
   final url = Uri.parse('http://localhost:5000/api/cart/add');
   final response = await http.post(
     url,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      // Ajoutez votre token d'authentification ici si nécessaire
-      // 'Authorization': 'Bearer $yourToken',
+      'Authorization': 'Bearer $jwtToken', // Utilisation du token
     },
     body: jsonEncode(<String, dynamic>{
-      'activityId': activity.id, // Assurez-vous que votre modèle Activity a un champ id
-      // Ajoutez d'autres champs nécessaires selon votre backend
+      'activityId': activity.id,
     }),
   );
 
   if (response.statusCode == 200) {
-    // Gérer la réponse positive, par exemple en affichant un message
     print('Activité ajoutée au panier');
   } else {
-    // Gérer l'erreur
     throw Exception('Failed to add activity to cart');
   }
 }
-
 
 class ActivityDetailScreen extends StatelessWidget {
   final Activity activity;
