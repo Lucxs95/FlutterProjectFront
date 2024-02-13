@@ -58,7 +58,12 @@ Future<void> seConnecterAvecEmailEtMotDePasse(BuildContext context) async {
         final prefs = await SharedPreferences.getInstance();
         var token = jsonDecode(response.body)['token'];
         await prefs.setString('token', token); // Stocker le token
-        print('Connexion réussie. Token: $token');
+
+        // Strocker le userId
+        var userId = jsonDecode(response.body)['userId']; // S'assurer que 'userId' est retourné par votre API
+        await prefs.setString('userId', userId); // Stocker le userId
+        
+        print('Connexion réussie. Token: $token, UserId: $userId');
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
       } else {
         String messageErreur = 'Une erreur est survenue';

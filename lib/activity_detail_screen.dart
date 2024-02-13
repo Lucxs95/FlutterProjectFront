@@ -6,13 +6,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String?> getJwtToken() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('flutter.token'); // Utilisez la clé que vous avez utilisée pour sauvegarder le token
+  return prefs.getString('token'); // Utilisez la clé 'token' pour récupérer le JWT
+}
+
+Future<String?> getUserId() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('userId'); // Utilisez la clé 'userId' pour récupérer l'identifiant de l'utilisateur
 }
 
 Future<void> addToCart(Activity activity) async {
   final jwtToken = await getJwtToken(); // Récupération du token
-  if (jwtToken == null) {
-    print('JWT Token is null');
+  final userId = await getUserId(); // Récupération de l'identifiant de l'utilisateur
+  if (jwtToken == null || userId == null) {
+    print(' JWT Token ou userId est null');
     return;
   }
 
@@ -24,6 +30,7 @@ Future<void> addToCart(Activity activity) async {
       'Authorization': 'Bearer $jwtToken', // Utilisation du token
     },
     body: jsonEncode(<String, dynamic>{
+      'userId': userId, // Remplacez par l'identifiant de l'utilisateur
       'activityId': activity.id,
     }),
   );

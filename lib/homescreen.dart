@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'activities_screen.dart'; // Importer ActivitiesScreen
+import 'cart_screen.dart'; // Importer CartScreen
 
 
 // Dans homescreen.dart
@@ -11,11 +12,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0; // Index de l'onglet sélectionné
   
-  static List<Widget> _widgetOptions = <Widget>[
-    ActivitiesScreen(), // Écran des activités, à créer
-    Text('Panier'), // Placeholder pour Panier
-    Text('Profil'), // Placeholder pour Profil
-  ];
+static List<Widget> _widgetOptions = <Widget>[
+  ActivitiesScreen(), // Écran des activités
+  CartScreen(), // Utilisez CartScreen au lieu du placeholder
+  Text('Profil'), // Placeholder pour Profil (à remplacer par votre écran de profil le moment venu)
+];
+
 
   void _onItemTapped(int index) {
     setState(() {

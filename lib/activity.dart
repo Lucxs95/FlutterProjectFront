@@ -1,5 +1,5 @@
 class Activity {
-  final String id; // Ajout de l'identifiant
+  final String id; // Ajoutez un champ pour l'id
   final String imageUrl;
   final String title;
   final String category;
@@ -19,7 +19,7 @@ class Activity {
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
-      id: json['id'], // Assurez-vous que votre JSON contient un champ 'id'
+      id: json['_id'], // Récupérez _id depuis le JSON
       imageUrl: json['imageUrl'],
       title: json['title'],
       category: json['category'],
