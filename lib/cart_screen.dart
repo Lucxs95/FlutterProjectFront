@@ -60,7 +60,7 @@ Future<void> removeFromCart(String userId, Activity activityId) async {
     },
     body: jsonEncode({
       'userId': userId,
-      'activityId': activityId,
+      'activityId': activityId.id,
     }),
   );
 
