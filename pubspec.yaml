@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: 0.19.0 # Utilisez la dernière version disponible
   http: 1.2.0 # Check for the latest version on https://pub.dev/packages/http
   shared_preferences: 2.2.2
 

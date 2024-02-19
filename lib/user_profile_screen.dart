@@ -1,5 +1,5 @@
 import 'dart:html';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -47,9 +47,11 @@ Future<void> fetchUserProfile() async {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      final birthday = data['birthday'] != null ? DateFormat('dd/MM/yyyy').format(DateTime.parse(data['birthday'])) : '';
+
       setState(() {
         _loginController.text = data['email'] ?? '';
-        _birthdayController.text = data['birthday'] ?? '';
+        _birthdayController.text = birthday;
         _addressController.text = data['address'] ?? '';
         _postalCodeController.text = data['postalCode'] ?? '';
         _cityController.text = data['city'] ?? '';
