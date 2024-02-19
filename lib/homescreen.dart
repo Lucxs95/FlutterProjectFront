@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'activities_screen.dart'; // Importer ActivitiesScreen
 import 'cart_screen.dart'; // Importer CartScreen
+import 'user_profile_screen.dart'; // Importer UserProfileScreen
 
 
 // Dans homescreen.dart
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 static List<Widget> _widgetOptions = <Widget>[
   ActivitiesScreen(), // Écran des activités
   CartScreen(), // Utilisez CartScreen au lieu du placeholder
-  Text('Profil'), // Placeholder pour Profil (à remplacer par votre écran de profil le moment venu)
+  UserProfileScreen(), // Utilisez UserProfileScreen au lieu du placeholder
 ];
 
 
