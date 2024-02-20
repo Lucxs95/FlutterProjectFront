@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'activity.dart';
 import 'activity_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 Future<List<Activity>> fetchActivities() async {
   final response = await http.get(Uri.parse('http://localhost:5000/api/activities'));
@@ -40,6 +41,16 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             isScrollable: true,
             tabs: categories.map((category) => Tab(text: category)).toList(),
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                setState(() {
+                  activitiesFuture = fetchActivities();
+                });
+              },
+            ),
+          ],
         ),
         body: TabBarView(
           children: categories.map((category) {
@@ -81,7 +92,14 @@ class _ActivitiesScreenState extends State<ActivitiesScreen> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(activity.imageUrl, width: 100, height: 100, fit: BoxFit.cover),
+                child: CachedNetworkImage(
+                  imageUrl: activity.imageUrl,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ),
               Expanded(
                 child: Padding(
