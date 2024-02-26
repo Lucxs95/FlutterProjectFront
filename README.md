@@ -34,10 +34,7 @@ Développer une application mobile permettant aux utilisateurs de :
 
 ## Plateformes de Test
 
-L'application a été testée sur les plateformes suivantes :
-
 - Chrome (Web)
-
 
 ## Identifiants de Connexion pour Tests
 
@@ -49,6 +46,7 @@ L'application a été testée sur les plateformes suivantes :
 - **MongoDB** pour la base de données.
 - **NodeJS** pour le serveur.
 - **Flutter** pour le développement multiplateforme.
+- Le backend est hébergé sur **Render**.
 
 ## Installation et Exécution
 
@@ -59,4 +57,4 @@ L'application a été testée sur les plateformes suivantes :
 
 ## Contact
 
-Pour toute question ou demande d'information, veuillez contacter Lucas BLANC à l'adresse suivante : [lucasb0695@gmail.com].
+Pour toute question ou demande d'information, veuillez contacter Lucas BLANC à l'adresse suivante : `lucasb0695@gmail.com`
