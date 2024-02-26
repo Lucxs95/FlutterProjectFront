@@ -40,7 +40,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<List<Activity>> fetchCartActivities(String userId) async {
-    final response = await http.get(Uri.parse('http://localhost:5000/api/cart/$userId'));
+    final response = await http.get(Uri.parse('https://flutterprojectback.onrender.com/api/cart/$userId'));
 
     if (response.statusCode == 200) {
       List<dynamic> activitiesJson = json.decode(response.body);
@@ -52,7 +52,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> removeFromCart(String userId, Activity activity) async {
     final response = await http.post(
-      Uri.parse('http://localhost:5000/api/cart/remove'),
+      Uri.parse('https://flutterprojectback.onrender.com/api/cart/remove'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -70,7 +70,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> removeAllFromCart(String userId) async {
     final response = await http.post(
-      Uri.parse('http://localhost:5000/api/cart/removeAll'),
+      Uri.parse('https://flutterprojectback.onrender.com/api/cart/removeAll'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

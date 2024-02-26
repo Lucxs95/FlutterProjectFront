@@ -40,7 +40,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     final jwtToken = await getJwtToken();
     final userId = await getUserId();
     final response = await http.get(
-      Uri.parse('http://localhost:5000/api/user/profile/$userId'),
+      Uri.parse('https://flutterprojectback.onrender.com/api/user/profile/$userId'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $jwtToken',
@@ -83,7 +83,7 @@ Future<void> saveUserProfile() async {
   }
 
   final response = await http.patch(
-    Uri.parse('http://localhost:5000/api/user/updateProfile/$userId'),
+    Uri.parse('https://flutterprojectback.onrender.com/api/user/updateProfile/$userId'),
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $jwtToken',

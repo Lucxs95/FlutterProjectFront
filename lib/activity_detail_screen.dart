@@ -22,7 +22,7 @@ Future<void> addToCart(Activity activity) async {
     return;
   }
 
-  final url = Uri.parse('http://localhost:5000/api/cart/add');
+  final url = Uri.parse('https://flutterprojectback.onrender.com/api/cart/add');
   final response = await http.post(
     url,
     headers: <String, String>{

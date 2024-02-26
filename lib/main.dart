@@ -39,7 +39,7 @@ Future<void> seConnecterAvecEmailEtMotDePasse(BuildContext context) async {
     return;
   }
 
-  final String backendUrl = 'http://localhost:5000/api/auth/login';
+  final String backendUrl = 'https://flutterprojectback.onrender.com/api/auth/login';
     try {
       final response = await http.post(
         Uri.parse(backendUrl),

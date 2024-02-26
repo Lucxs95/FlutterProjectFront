@@ -6,7 +6,7 @@ import 'activity_detail_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 Future<List<Activity>> fetchActivities() async {
-  final response = await http.get(Uri.parse('http://localhost:5000/api/activities'));
+  final response = await http.get(Uri.parse('https://flutterprojectback.onrender.com/api/activities'));
   if (response.statusCode == 200) {
     List activitiesJson = json.decode(response.body);
     return activitiesJson.map((json) => Activity.fromJson(json)).toList();
