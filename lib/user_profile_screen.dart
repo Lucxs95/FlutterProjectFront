@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
+
 
 Future<String?> getJwtToken() async {
   final prefs = await SharedPreferences.getInstance();
@@ -180,6 +182,9 @@ TextField(
                 prefixIcon: Icon(Icons.local_post_office),
               ),
               keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly], // This line enforces numeric input
+
+
             ),
             SizedBox(height: 20),
 TextField(
