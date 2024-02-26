@@ -67,7 +67,6 @@ Future<void> saveUserProfile() async {
   final jwtToken = await getJwtToken();
   final userId = await getUserId();
 
-  // Convertir la date du format dd/MM/yyyy en un objet DateTime
   DateTime? birthday;
   try {
     final parts = _birthdayController.text.split('/');
@@ -78,8 +77,8 @@ Future<void> saveUserProfile() async {
       birthday = DateTime(year, month, day);
     }
   } catch (e) {
-    print("Error parsing birthday: $e");
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid birthday format")));
+    print("Erreur lors de l'analyse de l'anniversaire: $e");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Format d'anniversaire invalide")));
     return;
   }
 
@@ -91,8 +90,7 @@ Future<void> saveUserProfile() async {
     },
     body: jsonEncode({
       'email': _loginController.text,
-      // Ne pas envoyer le mot de passe s'il ne doit pas être modifié ou géré différemment
-      'birthday': birthday != null ? DateFormat('yyyy-MM-dd').format(birthday) : null, // Convertit en format ISO 8601
+      'birthday': birthday != null ? DateFormat('yyyy-MM-dd').format(birthday) : null,
       'address': _addressController.text,
       'postalCode': _postalCodeController.text,
       'city': _cityController.text,
@@ -100,9 +98,9 @@ Future<void> saveUserProfile() async {
   );
 
   if (response.statusCode == 200) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profile updated successfully")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mise à jour du profil réussie")));
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Failed to update profile")));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Échec de la mise à jour du profil")));
   }
 }
 
@@ -119,7 +117,7 @@ Future<void> saveUserProfile() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('User Profile')),
+      appBar: AppBar(title: Text('Profil de l\'utilisateur')),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -139,7 +137,7 @@ Future<void> saveUserProfile() async {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
-                enabled: false, // Désactive le champ de texte
+                enabled: false, 
 
             ),            
             SizedBox(height: 20),
@@ -151,57 +149,57 @@ Future<void> saveUserProfile() async {
                 prefixIcon: Icon(Icons.lock),
 
               ),
-                obscureText: true, // Ceci obfusque le texte entré dans le champ de texte
-                enabled: false, // Désactive le champ de texte
+                obscureText: true, 
+                enabled: false,
 
             ),
             SizedBox(height: 20),
             TextField(
               controller: _birthdayController,
               decoration: InputDecoration(
-                labelText: 'Birthday',
+                labelText: 'Anniversaire',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.cake),
               ),
             ),
-            SizedBox(height: 20), // Ajoute un espace de 20 pixels en dessous du champ de texte
+            SizedBox(height: 20), 
 
             TextField(
               controller: _addressController,
               decoration: InputDecoration(
-                labelText: 'Address',
+                labelText: 'Addresse',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.home),
               ),
             ),
-            SizedBox(height: 20), // Ajoute un espace de 20 pixels en dessous du champ de texte
+            SizedBox(height: 20),
 TextField(
               controller: _postalCodeController,
               decoration: InputDecoration(
-                labelText: 'Postal Code',
+                labelText: 'Code Postal',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.local_post_office),
               ),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20), // Ajoute un espace de 20 pixels en dessous du champ de texte
+            SizedBox(height: 20),
 TextField(
               controller: _cityController,
               decoration: InputDecoration(
-                labelText: 'City',
+                labelText: 'Ville',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.location_city),
               ),
             ),
             SizedBox(height: 20),
             ElevatedButton(onPressed: saveUserProfile, child: Text('Sauvegarder')),
-                        SizedBox(height: 20), // Ajoute un espace de 20 pixels en dessous du champ de texte
+                        SizedBox(height: 20),
 
             ElevatedButton(onPressed: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.clear();
               window.location.reload();
-            }, child: Text('Logout'), style: ElevatedButton.styleFrom(primary: Colors.red)),
+            }, child: Text('Se déconnecter'), style: ElevatedButton.styleFrom(primary: Colors.red)),
           ],
         ),
       ),

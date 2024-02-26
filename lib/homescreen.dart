@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'activities_screen.dart'; // Importer ActivitiesScreen
-import 'cart_screen.dart'; // Importer CartScreen
-import 'user_profile_screen.dart'; // Importer UserProfileScreen
+import 'activities_screen.dart';
+import 'cart_screen.dart';
+import 'user_profile_screen.dart'; 
 
 
-// Dans homescreen.dart
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0; // Index de l'onglet sélectionné
+  int _selectedIndex = 0; 
   
 static List<Widget> _widgetOptions = <Widget>[
-  ActivitiesScreen(), // Écran des activités
-  CartScreen(), // Utilisez CartScreen au lieu du placeholder
-  UserProfileScreen(), // Utilisez UserProfileScreen au lieu du placeholder
+  ActivitiesScreen(),
+  CartScreen(), 
+  UserProfileScreen(),
 ];
 
 

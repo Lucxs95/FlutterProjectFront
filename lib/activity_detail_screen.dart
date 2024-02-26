@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'activity.dart'; // Assurez-vous que le chemin d'accès est correct
+import 'activity.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // Pour utiliser json.decode
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<String?> getJwtToken() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('token'); // Utilisez la clé 'token' pour récupérer le JWT
+  return prefs.getString('token');
 }
 
 Future<String?> getUserId() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('userId'); // Utilisez la clé 'userId' pour récupérer l'identifiant de l'utilisateur
+  return prefs.getString('userId'); 
 }
 
 Future<void> addToCart(Activity activity) async {
-  final jwtToken = await getJwtToken(); // Récupération du token
-  final userId = await getUserId(); // Récupération de l'identifiant de l'utilisateur
+  final jwtToken = await getJwtToken(); 
+  final userId = await getUserId(); 
   if (jwtToken == null || userId == null) {
     print(' JWT Token ou userId est null');
     return;
@@ -27,10 +27,10 @@ Future<void> addToCart(Activity activity) async {
     url,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $jwtToken', // Utilisation du token
+      'Authorization': 'Bearer $jwtToken', 
     },
     body: jsonEncode(<String, dynamic>{
-      'userId': userId, // Remplacez par l'identifiant de l'utilisateur
+      'userId': userId, 
       'activityId': activity.id,
     }),
   );
@@ -38,7 +38,7 @@ Future<void> addToCart(Activity activity) async {
   if (response.statusCode == 200) {
     print('Activité ajoutée au panier');
   } else {
-    throw Exception('Failed to add activity to cart');
+    throw Exception('Échec de l\'ajout d\'une activité au panier');
   }
 }
 
@@ -71,12 +71,10 @@ class ActivityDetailScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       addToCart(activity).then((_) {
-                        // Afficher un Snackbar, par exemple, pour confirmer l'ajout
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Activité ajoutée au panier')),
                         );
                       }).catchError((error) {
-                        // Gérer l'erreur, par exemple, en affichant un message d'erreur
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Erreur lors de l\'ajout au panier')),
                         );
@@ -86,11 +84,11 @@ class ActivityDetailScreen extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context); // Retour à la page précédente
+                      Navigator.pop(context); 
                     },
                     child: Text('Retour'),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey, // Couleur du bouton
+                      primary: Colors.grey, 
                     ),
                   ),
                 ],

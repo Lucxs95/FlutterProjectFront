@@ -11,7 +11,7 @@ Future<List<Activity>> fetchActivities() async {
     List activitiesJson = json.decode(response.body);
     return activitiesJson.map((json) => Activity.fromJson(json)).toList();
   } else {
-    throw Exception('Failed to load activities');
+    throw Exception('Échec du chargement des activités');
   }
 }
 

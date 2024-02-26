@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'activity.dart'; // Importez votre modèle Activity
+import 'activity.dart'; 
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // Pour utiliser json.decode
+import 'dart:convert'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CartScreen extends StatefulWidget {
@@ -11,34 +11,33 @@ class CartScreen extends StatefulWidget {
 
 Future<String?> getJwtToken() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('token'); // Utilisez la clé 'token' pour récupérer le JWT
+  return prefs.getString('token'); 
 }
 
 Future<String?> getUserId() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('userId'); // Utilisez la clé 'userId' pour récupérer l'identifiant de l'utilisateur
+  return prefs.getString('userId'); 
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<Activity> cartActivities = []; // Liste pour stocker les activités du panier
-  double total = 0.0; // Total général
+  List<Activity> cartActivities = []; 
+  double total = 0.0; 
 
-@override
-void initState() {
-  super.initState();
-  getUserId().then((userId) {
-    if (userId != null) {
-      fetchCartActivities(userId).then((activities) {
-        setState(() {
-          cartActivities = activities;
-          total = activities.fold(0, (prev, activity) => prev + activity.price);
+  @override
+  void initState() {
+    super.initState();
+    getUserId().then((userId) {
+      if (userId != null) {
+        fetchCartActivities(userId).then((activities) {
+          setState(() {
+            cartActivities = activities;
+            total = activities.fold(0, (prev, activity) => prev + activity.price);
+          });
+        }).catchError((error) {
         });
-      }).catchError((error) {
-        // Handle errors, for example, by showing a snackbar
-      });
-    }
-  });
-}
+      }
+    });
+  }
 
   Future<List<Activity>> fetchCartActivities(String userId) async {
     final response = await http.get(Uri.parse('http://localhost:5000/api/cart/$userId'));
@@ -47,29 +46,44 @@ void initState() {
       List<dynamic> activitiesJson = json.decode(response.body);
       return activitiesJson.map((json) => Activity.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load cart activities');
+      throw Exception('Échec du chargement des activités du panier');
     }
   }
 
+  Future<void> removeFromCart(String userId, Activity activity) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:5000/api/cart/remove'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'userId': userId,
+        'activityId': activity.id,
+      }),
+    );
 
-Future<void> removeFromCart(String userId, Activity activityId) async {
-  final response = await http.post(
-    Uri.parse('http://localhost:5000/api/cart/remove'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode({
-      'userId': userId,
-      'activityId': activityId.id,
-    }),
-  );
-
-  if (response.statusCode == 200) {
-    // Mise à jour de l'interface utilisateur ou rafraîchissement de la liste des activités du panier ici
-  } else {
-    throw Exception('Failed to remove activity from cart');
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Échec de la suppression de l\'activité du panier');
+    }
   }
-}
+
+  Future<void> removeAllFromCart(String userId) async {
+    final response = await http.post(
+      Uri.parse('http://localhost:5000/api/cart/removeAll'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'userId': userId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Échec de la suppression de toutes les activités du panier');
+    }
+  }
 
 
   @override
@@ -77,11 +91,34 @@ Future<void> removeFromCart(String userId, Activity activityId) async {
     return Scaffold(
       appBar: AppBar(
         title: Text('Mon Panier'),
+        actions: [
+          IconButton(
+  icon: Icon(Icons.delete_sweep),
+  onPressed: () async {
+    String? userId = await getUserId();
+    if (userId != null) {
+      removeAllFromCart(userId).then((_) {
+        setState(() {
+          cartActivities.clear(); 
+          total = 0.0; 
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Panier vidé avec succès')),
+        );
+      }).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur lors du videment du panier')),
+        );
+      });
+    }
+  },
+),
+        ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: cartActivities.length,
               itemBuilder: (context, index) {
                 Activity activity = cartActivities[index];
@@ -92,11 +129,9 @@ Future<void> removeFromCart(String userId, Activity activityId) async {
                   trailing: IconButton(
                     icon: Icon(Icons.remove_circle_outline),
                     onPressed: () async {
-                      String? userId = await getUserId(); // Assurez-vous d'avoir une méthode pour récupérer l'userId
+                      String? userId = await getUserId();
                       if (userId != null) {
                         removeFromCart(userId, activity).then((_) {
-                          // Après la suppression, vous pourriez vouloir rafraîchir la liste des activités dans le panier
-                          // Peut-être en appelant à nouveau fetchCartActivities ou en mettant à jour l'état local
                           setState(() {
                             cartActivities.removeAt(index);
                             total -= activity.price;
@@ -114,9 +149,17 @@ Future<void> removeFromCart(String userId, Activity activityId) async {
                   ),
                 );
               },
+              separatorBuilder: (context, index) => Divider(color: Colors.grey),
             ),
           ),
-          Text('Total général: $total€'),
+          Divider(color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Total général: $total€',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
         ],
       ),
     );

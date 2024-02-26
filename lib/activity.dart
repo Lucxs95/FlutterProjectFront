@@ -1,5 +1,5 @@
 class Activity {
-  final String id; // Ajoutez un champ pour l'id
+  final String id; 
   final String imageUrl;
   final String title;
   final String category;
@@ -8,7 +8,7 @@ class Activity {
   final double price;
 
   Activity({
-    required this.id, // Assurez-vous d'inclure l'id dans le constructeur
+    required this.id, 
     required this.imageUrl,
     required this.title,
     required this.category,
@@ -19,7 +19,7 @@ class Activity {
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
-      id: json['_id'], // Récupérez _id depuis le JSON
+      id: json['_id'],
       imageUrl: json['imageUrl'],
       title: json['title'],
       category: json['category'],

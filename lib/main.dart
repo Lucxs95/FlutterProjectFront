@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'homescreen.dart'; // Importer HomeScreen
+import 'homescreen.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -34,11 +34,9 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
 
 Future<void> seConnecterAvecEmailEtMotDePasse(BuildContext context) async {
-  // Vérifier si les champs email ou mot de passe sont vides
   if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-    // Afficher un dialogue d'erreur si un des champs est vide
     afficherDialogErreur(context, "L'email et le mot de passe ne doivent pas être vides.");
-    return; // Arrêter l'exécution de la méthode si un champ est vide
+    return;
   }
 
   final String backendUrl = 'http://localhost:5000/api/auth/login';
@@ -57,11 +55,10 @@ Future<void> seConnecterAvecEmailEtMotDePasse(BuildContext context) async {
       if (response.statusCode == 200) {
         final prefs = await SharedPreferences.getInstance();
         var token = jsonDecode(response.body)['token'];
-        await prefs.setString('token', token); // Stocker le token
+        await prefs.setString('token', token); 
 
-        // Strocker le userId
-        var userId = jsonDecode(response.body)['userId']; // S'assurer que 'userId' est retourné par votre API
-        await prefs.setString('userId', userId); // Stocker le userId
+        var userId = jsonDecode(response.body)['userId'];
+        await prefs.setString('userId', userId);
         
         print('Connexion réussie. Token: $token, UserId: $userId');
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
