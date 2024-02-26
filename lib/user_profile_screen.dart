@@ -90,6 +90,7 @@ Future<void> saveUserProfile() async {
     },
     body: jsonEncode({
       'email': _loginController.text,
+      'password': _passwordController.text,
       'birthday': birthday != null ? DateFormat('yyyy-MM-dd').format(birthday) : null,
       'address': _addressController.text,
       'postalCode': _postalCodeController.text,
