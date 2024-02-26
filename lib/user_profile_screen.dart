@@ -151,8 +151,6 @@ Future<void> saveUserProfile() async {
 
               ),
                 obscureText: true, 
-                enabled: false,
-
             ),
             SizedBox(height: 20),
             TextField(
